@@ -5,6 +5,24 @@
 
 static Log sLog("F:\\Microsoft Visual Studio\\2019\\Projects\\Lee.Aut\\Practice\\log\\", "String");
 
+String String::Slice(const size_t index, const size_t length, const String& dstStr)
+{
+	if (length == 0) {
+		sLog.Warn("Cut length is 0.");
+		return "\0";
+	}
+	if (index + length > dstStr._size) {
+		sLog.Error("Cut index with length is overflow string length.");
+		return "\0";
+	}
+	char* cutStr = (char*)malloc(sizeof(char) * (length + 1));
+	memset(cutStr, 0, sizeof(char) * (length + 1));
+	memcpy(cutStr, &(dstStr._str[index]), sizeof(char) * length);
+	String rStr(cutStr);
+	free(cutStr);
+	return rStr;
+}
+
 String::String()
 {
 }
@@ -65,17 +83,17 @@ String& String::Insert(const size_t index, const String& other)
 	return *this;
 }
 
-String& String::InsertFront(const String& other)
+String& String::PushFront(const String& other)
 {
 	return Insert(0, other);
 }
 
-String& String::InsertBack(const String& other)
+String& String::PushBack(const String& other)
 {
 	return Insert(_size, other);
 }
 
-String String::Cut(const size_t index, const size_t length) const
+String String::Slice(const size_t index, const size_t length) const
 {
 	if (length == 0) {
 		sLog.Warn("Cut length is 0.");
@@ -93,14 +111,14 @@ String String::Cut(const size_t index, const size_t length) const
 	return rStr;
 }
 
-String& String::Write(const String& file, const String& mode) 
+String& String::Write(const String& file, const String& mode)
 {
 	if (Empty()) {
 		sLog.Warn("String is empty, can not write in file.");
 		return *this;
 	}
 	FILE* wFile = nullptr;
-	fopen_s(&wFile, file.CStr(), mode.CStr());
+	fopen_s(&wFile, file.C_Str(), mode.C_Str());
 	if (!wFile) {
 		sLog.Error("Log file open failed.");
 		return *this;
@@ -109,7 +127,6 @@ String& String::Write(const String& file, const String& mode)
 	fclose(wFile);
 	return *this;
 }
-
 String& String::ToLower(void)
 {
 	if (Empty()) {
@@ -134,8 +151,7 @@ String& String::ToUpper(void)
 		if (_str[i] >= 'a' && _str[i] <= 'z') {
 			_str[i] -= 32;
 		}
-	}
-	return *this;
+	} return *this;
 }
 
 String& String::operator=(const String& other)
@@ -146,12 +162,12 @@ String& String::operator=(const String& other)
 String String::operator+(const String& right) const
 {
 	String rStr(_str);
-	return rStr.InsertBack(right);
+	return rStr.PushBack(right);
 }
 
 String& String::_CopyFrom(const char other)
 {
-	if (_str) { 
+	if (_str) {
 		free(_str);
 		_str = nullptr;
 		_size = 0;
@@ -208,7 +224,7 @@ std::istream& operator>>(std::istream& in, String& other)
 	char temp = '\0';
 	while ((temp = getchar()) != '\n')
 	{
-		other.InsertBack(temp);
+		other.PushBack(temp);
 	}
 	return in;
 }

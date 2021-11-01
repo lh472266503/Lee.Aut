@@ -6,7 +6,7 @@ Log::Log(const String& path, const String& name)
 {
 	_pPath = new String(path);
 	_pName = new String(name);
-	_pName->InsertBack(".log");
+	_pName->PushBack(".log");
 }
 
 Log::~Log()
@@ -20,29 +20,29 @@ Log::~Log()
 Log& Log::Error(const String& errMsg)
 {
 	String text("[Error]");
-	text.InsertBack(errMsg);
-	text.InsertBack('\n');
-	text.Write(_pPath->InsertBack(*_pName), "a");
-	printf("%s", text.CStr());
+	text.PushBack(errMsg);
+	text.PushBack('\n');
+	text.Write(_pPath->PushBack(*_pName), "a");
+	printf("%s", text.C_Str());
 	return *this;
 }
 
 Log& Log::Warn(const String& warnMsg)
 {
 	String text("[Warn]");
-	text.InsertBack(warnMsg);
-	text.InsertBack('\n');
-	text.Write(_pPath->InsertBack(*_pName), "a");
-	printf("%s", text.CStr());
+	text.PushBack(warnMsg);
+	text.PushBack('\n');
+	text.Write(_pPath->PushBack(*_pName), "a");
+	printf("%s", text.C_Str());
 	return *this;
 }
 
 Log& Log::Info(const String& infoMsg)
 {
 	String text("[Info]");
-	text.InsertBack(infoMsg);
-	text.InsertBack('\n');
-	text.Write(_pPath->InsertBack(*_pName), "a");
-	printf("%s", text.CStr());
+	text.PushBack(infoMsg);
+	text.PushBack('\n');
+	text.Write(_pPath->PushBack(*_pName), "a");
+	printf("%s", text.C_Str());
 	return *this;
 }

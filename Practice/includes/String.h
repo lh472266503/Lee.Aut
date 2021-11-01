@@ -13,6 +13,8 @@ public:
 	template<typename ...Args>
 	String& FormatSelf(const char* fmt, Args... args);
 
+	static String Slice(const size_t index, const size_t length, const String& dstStr);
+
 	String();
 	String(const char other);
 	String(const char* other);
@@ -22,13 +24,13 @@ public:
 
 	const size_t Size(void) const noexcept { return _size; }
 	const bool Empty(void) const noexcept { return _str == nullptr || _str == "\0"; }
-	const char* CStr(void) const noexcept { return _str == nullptr ? "" : _str; }
+	const char* C_Str(void) const noexcept { return _str == nullptr ? "" : _str; }
 
 	String& Insert(const size_t index, const String& other);
-	String& InsertFront(const String& other);
-	String& InsertBack(const String& other);
-	String Cut(const size_t index, const size_t length) const;
-	String& Write(const String& file, const String& mode) ;
+	String& PushFront(const String& other);
+	String& PushBack(const String& other);
+	String Slice(const size_t index, const size_t length) const;
+	String& Write(const String& file, const String& mode);
 
 	String& ToLower(void);
 	String& ToUpper(void);
@@ -40,7 +42,7 @@ public:
 	char& operator[](const size_t index) { return _str[index]; }
 	const char& operator[](const size_t index)const { return _str[index]; }
 	String operator+(const String& right) const;
-	String& operator+=(const String& right) { return this->InsertBack(right); }
+	String& operator+=(const String& right) { return this->PushBack(right); }
 protected:
 private:
 	String& _CopyFrom(const char other);
